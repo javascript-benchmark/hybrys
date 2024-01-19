@@ -1,0 +1,12 @@
+$productCatalog=apparelProductCatalog
+$currencies=EUR
+$net=false
+$storeUid=apparel-de
+$defaultCurrency=EUR
+$languages=de
+$defaultLanguage=de
+
+$worldpayResponsiveCheckoutGroup=worldpayB2CResponsiveCheckoutGroup
+
+UPDATE BaseStore;uid[unique=true];checkoutFlowGroup
+;$storeUid;$worldpayResponsiveCheckoutGroup

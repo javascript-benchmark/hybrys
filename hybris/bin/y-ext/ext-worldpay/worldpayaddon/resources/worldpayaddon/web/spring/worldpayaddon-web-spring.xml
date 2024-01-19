@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <context:annotation-config/>
+
+    <bean id="worldpayViewChangeBeforeViewHandlerAdaptee" class="com.worldpay.interceptors.beforeview.WorldpayViewChangeBeforeViewHandler">
+        <constructor-arg name="viewMap">
+            <map>
+                <entry key="pages/checkout/checkoutConfirmationPage" value="addon:/worldpayaddon/pages/checkout/worldpayOrderConfirmationPage"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <bean id="worldpayViewChangeBeforeViewHandler" parent="beforeViewHandlerAdapter">
+        <property name="adaptee" ref="worldpayViewChangeBeforeViewHandlerAdaptee"/>
+    </bean>
+
+    <bean id="worldpayViewChangeBeforeViewHandlerListMergeDirective" depends-on="beforeViewHandlersList"
+          parent="listMergeDirective">
+        <property name="add" ref="worldpayViewChangeBeforeViewHandler"/>
+    </bean>
+
+    <bean id="worldpayJsVariablesBeforeViewHandlerAdaptee"
+          class="com.worldpay.interceptors.beforeview.WorldpayJsVariablesBeforeViewHandler">
+        <constructor-arg name="siteConfigService" ref="siteConfigService"/>
+        <constructor-arg name="worldpayFraudSightStrategy" ref="worldpayFraudSightStrategy"/>
+    </bean>
+
+    <bean id="worldpayJsVariablesBeforeViewHandler" parent="beforeViewHandlerAdapter">
+        <property name="adaptee" ref="worldpayJsVariablesBeforeViewHandlerAdaptee"/>
+    </bean>
+
+    <bean id="worldpayJsVariablesBeforeViewHandlerListMergeDirective" depends-on="beforeViewHandlersList"
+          parent="listMergeDirective">
+        <property name="add" ref="worldpayJsVariablesBeforeViewHandler"/>
+    </bean>
+
+    <util:set id="apmErrorResponseStatuses" value-type="com.worldpay.enums.order.AuthorisedStatus">
+        <value>ERROR</value>
+        <value>FAILURE</value>
+        <value>EXPIRED</value>
+    </util:set>
+
+    <bean id="worldpayCCComponentRenderer" class="com.worldpay.renderers.WorldpayCCComponentRenderer" parent="addOnJspIncludeCMSComponentRenderer"/>
+
+    <bean id="WorldpayCCComponentRendererMapping" parent="addonCmsComponentRendererMapping">
+        <property name="typeCode" value="WorldpayCCComponent"/>
+        <property name="renderer" ref="worldpayCCComponentRenderer"/>
+    </bean>
+
+    <!-- Expose /acceleratoraddon/web/webroot/WEB-INF/messages/base.js.properties  resource bundle as javascript variables -->
+    <bean id="defaultWorldpayaddonJavaScriptMessageResourceAccessor"
+          parent="abstractJavaScriptMessageResourceAccessor">
+        <property name="addOnName" value="worldpayaddon"/>
+    </bean>
+
+    <bean id="defaultWorldpayaddonBeforeViewJsPropsHandlerAdaptee"
+          parent="abstractBeforeViewJsPropsHandlerAdaptee"
+          class="de.hybris.platform.addonsupport.interceptors.ExportJsPropertiesBeforeViewHandler">
+        <property name="messageSource" ref="defaultWorldpayaddonJavaScriptMessageResourceAccessor"/>
+    </bean>
+
+    <bean id="worldpayaddonBeforeViewHandler" parent="beforeViewHandlerAdapter">
+        <property name="adaptee" ref="defaultWorldpayaddonBeforeViewJsPropsHandlerAdaptee"/>
+    </bean>
+
+    <bean id="worldpayaddonBeforeViewHandlerListMergeDirective" depends-on="beforeViewHandlersList"
+          parent="listMergeDirective">
+        <property name="add" ref="worldpayaddonBeforeViewHandler"/>
+    </bean>
+
+    <bean id="redirectToPaymentMethod" class="java.lang.String">
+        <constructor-arg value="redirect:/checkout/multi/worldpay/payment-method/add"/>
+    </bean>
+
+    <bean id="REDIRECT_TO_HOP_RESPONSE_METHOD" class="java.lang.String">
+        <constructor-arg value="redirect:/checkout/multi/worldpay/hop-response"/>
+    </bean>
+
+    <bean id="REDIRECT_TO_SUMMARY" class="java.lang.String">
+        <constructor-arg value="redirect:/checkout/multi/worldpay/summary/view"/>
+    </bean>
+
+    <bean id="REDIRECT_TO_CHOOSE_PAYMENT_METHOD" class="java.lang.String">
+        <constructor-arg value="redirect:/checkout/multi/worldpay/choose-payment-method"/>
+    </bean>
+
+    <bean id="redirectStrategy" class="org.springframework.security.web.DefaultRedirectStrategy"/>
+
+    <alias name="defaultWorldpayCommerceRedirectStrategy" alias="commerceRedirectStrategy"/>
+    <bean name="defaultWorldpayCommerceRedirectStrategy" class="com.worldpay.security.WorldpayCommerceRedirectStrategy"
+          parent="redirectStrategy">
+        <constructor-arg name="checkoutFlowFacade" ref="checkoutFlowFacade"/>
+        <constructor-arg name="expressTargetUrl" value="/checkout/multi/worldpay/summary/express"/>
+    </bean>
+
+</beans>

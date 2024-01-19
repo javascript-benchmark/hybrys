@@ -1,0 +1,23 @@
+# you can put key/value pairs here.
+# Use Config.getParameter(..) to retrieve the values during runtime.
+
+
+# Specifies the location of the spring context file added automatically to the global platform application context.
+worldpayb2baddon.application-context=worldpayb2baddon-spring.xml
+
+yacceleratorstorefront.additionalWebSpringConfigs.worldpayb2baddon=classpath:/worldpayb2baddon/web/spring/worldpayb2baddon-web-spring.xml, classpath:/worldpayb2baddon/web/spring/b2b-multi-step-checkout-spring.xml
+
+storefront.supportedUiExperienceLevels.powertools=DESKTOP
+
+# Payment Service provider.
+payment.service-provider.name=Worldpay
+
+# Set the HOP PCI strategy at this level so that it's consistent across stores
+hop.pci.strategy.enabled=true
+
+worldpayb2baddon.javascript.paths.responsive=/responsive/common/js/worldpayaddon.js;\
+    /responsive/common/js/worldpayaddonCSE.js;\
+    /responsive/common/js/worldpayCollector.js
+worldpayb2baddon.css.paths.responsive=/responsive/common/css/worldpayaddon.css
+
+worldpay.addon.prefix=addon:/worldpayb2baddon/

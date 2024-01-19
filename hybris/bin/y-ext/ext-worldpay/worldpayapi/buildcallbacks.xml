@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<project name="worldpayapi_buildcallbacks">
+
+    <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+        <classpath>
+            <fileset dir="${ext.worldpayapi.path}/lib"
+                     includes="**/*.jar"/>
+        </classpath>
+    </taskdef>
+
+    <macrodef name="worldpayapi_before_build"
+              description="Generates Java classes from DTD with JAXB's xjc">
+        <sequential>
+            <echo message="Generating Java classes from DTD with JAXB's xjc"/>
+            <property name="ant.xjc.target.dir"
+                      value="${ext.worldpayapi.path}/gensrc"/>
+            <if>
+                <available file="${ant.xjc.target.dir}" type="dir"/>
+                <then>
+                    <echo message="gensrc has already been created"/>
+                </then>
+                <else>
+                    <mkdir dir="${ant.xjc.target.dir}"/>
+                </else>
+            </if>
+            <xjc destdir="${ant.xjc.target.dir}/" package="com.worldpay.internal.model"
+                 schema="${ext.worldpayapi.path}/resources/dtd/paymentService_v1.dtd" fork="true">
+                <arg line="-dtd -verbose"/>
+                <jvmarg value="-DenableExternalEntityProcessing=true"/>
+            </xjc>
+            <echo message="Worldpay dtd classes created in the gensrc folder"/>
+        </sequential>
+    </macrodef>
+</project>

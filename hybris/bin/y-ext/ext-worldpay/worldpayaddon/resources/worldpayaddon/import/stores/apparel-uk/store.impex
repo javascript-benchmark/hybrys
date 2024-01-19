@@ -1,0 +1,11 @@
+$productCatalog=apparelProductCatalog
+$currencies=GBP
+$net=false
+$storeUid=apparel-uk
+$defaultCurrency=GBP
+$languages=en
+$defaultLanguage=en
+$worldpayResponsiveCheckoutGroup=worldpayB2CResponsiveCheckoutGroup
+
+UPDATE BaseStore;uid[unique=true];checkoutFlowGroup
+;$storeUid;$worldpayResponsiveCheckoutGroup

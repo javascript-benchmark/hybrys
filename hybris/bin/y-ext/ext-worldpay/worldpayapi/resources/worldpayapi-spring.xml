@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <import resource="classpath:/spring/worldpayapi-order-actions-spring.xml"/>
+    <import resource="classpath:/spring/worldpayapi-gateway-spring.xml"/>
+    <import resource="classpath:/spring/worldpayapi-applepay-spring.xml"/>
+    <import resource="classpath:/spring/worldpayapi-commands-spring.xml"/>
+    <import resource="classpath:/spring/worldpayapi-factories-spring.xml"/>
+    <import resource="classpath:/spring/worldpayapi-interceptors-spring.xml"/>
+    <import resource="classpath:/spring/worldpayapi-handlers-spring.xml"/>
+    <import resource="classpath:/spring/worldpayapi-appenders-spring.xml"/>
+    <import resource="classpath:/spring/worldpayapi-daos-spring.xml"/>
+    <import resource="classpath:/spring/worldpayapi-services-spring.xml"/>
+    <import resource="classpath:/spring/worldpayapi-strategies-spring.xml"/>
+    <import resource="classpath:/spring/worldpayapi-facades-spring.xml"/>
+    <import resource="classpath:/spring/worldpayapi-converters-spring.xml"/>
+    <import resource="classpath:/spring/worldpayapi-internal-converters-spring.xml"/>
+
+    <util:map id="paymentTransactionTypeMap" map-class="java.util.HashMap"
+              key-type="com.worldpay.enums.order.AuthorisedStatus"
+              value-type="de.hybris.platform.payment.enums.PaymentTransactionType">
+        <entry key="AUTHORISED" value="AUTHORIZATION"/>
+        <entry key="CAPTURED" value="CAPTURE"/>
+        <entry key="REFUSED" value="REFUSED"/>
+        <entry key="CANCELLED" value="CANCEL"/>
+        <entry key="REFUNDED" value="REFUND_FOLLOW_ON"/>
+        <entry key="VOIDED" value="VOIDED"/>
+    </util:map>
+
+</beans>
